@@ -25,9 +25,9 @@ builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateActivityCommand).Assembly));
 
 // MassTransit + RabbitMQ
-var rabbitHost = builder.Configuration["RABBITMQ__HOST"] ?? "guest";
+var rabbitHost = builder.Configuration["RABBITMQ__HOST"] ?? "rabbitmq";
 var rabbitUser = builder.Configuration["RABBITMQ__USER"] ?? "guest";
-var rabbitPass = builder.Configuration["RABBITMQ__PASS"] ?? "Your_str0ng_P@ssw0rd";
+var rabbitPass = builder.Configuration["RABBITMQ__PASS"] ?? "guest";
 
 builder.Services.AddMassTransit(x =>
 {

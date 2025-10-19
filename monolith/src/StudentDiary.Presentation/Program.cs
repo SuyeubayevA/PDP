@@ -52,8 +52,8 @@ builder.Services
     });
 
 var rabbitHost = builder.Configuration["RABBITMQ__HOST"] ?? "rabbitmq";
-var rabbitUser = builder.Configuration["RABBITMQ__USER"] ?? "admin";
-var rabbitPass = builder.Configuration["RABBITMQ__PASS"] ?? "HPSRabbitQ";
+var rabbitUser = builder.Configuration["RABBITMQ__USER"] ?? "guest";
+var rabbitPass = builder.Configuration["RABBITMQ__PASS"] ?? "guest";
 
 builder.Services.AddMassTransit(x =>
 {
