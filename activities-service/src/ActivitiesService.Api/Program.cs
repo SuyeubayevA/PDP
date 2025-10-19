@@ -1,12 +1,11 @@
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using MassTransit;
 using ActivitiesService.Application.Activities;
 using ActivitiesService.Application.Ports;
 using ActivitiesService.Domain.Repositories;
 using ActivitiesService.Infrastructure.Data;
-using ActivitiesService.Infrastructure.Repositories;
 using ActivitiesService.Infrastructure.Messaging;
+using ActivitiesService.Infrastructure.Repositories;
+using MassTransit;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,16 +45,47 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("activities.student-removed", e =>
         {
             e.ConfigureConsumer<StudentRemovedEventConsumer>(context);
+
+            e.UseMessageRetry(r =>
+            {
+                r.Interval(3, TimeSpan.FromSeconds(5));
+                r.Handle<InvalidOperationException>();
+                r.Handle<DbUpdateException>();
+            });
+
+            e.DiscardFaultedMessages();
         });
 
         cfg.ReceiveEndpoint("activities.activity-created", e =>
         {
             e.ConfigureConsumer<ActivityCreatedConsumer>(context);
+
+            e.UseMessageRetry(r =>
+            {
+                r.Interval(5, TimeSpan.FromSeconds(2));
+                r.Handle<DbUpdateException>();
+                r.Handle<InvalidOperationException>();
+                r.Ignore<ArgumentException>();
+                r.Ignore<ArgumentNullException>();
+            });
+
+            e.DiscardFaultedMessages();
         });
 
         cfg.ReceiveEndpoint("activities.student-enrolled", e =>
         {
             e.ConfigureConsumer<StudentEnrolledConsumer>(context);
+
+            e.UseMessageRetry(r =>
+            {
+                r.Interval(5, TimeSpan.FromSeconds(1));
+                r.Handle<DbUpdateException>();
+                r.Handle<InvalidOperationException>();
+                r.Ignore<ArgumentException>();
+                r.Ignore<ArgumentNullException>();
+            });
+
+            e.DiscardFaultedMessages();
         });
     });
 });
