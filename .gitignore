@@ -1,0 +1,94 @@
+# ===== Visual Studio / Rider / VS Code =====
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# Mono
+*.pid
+*.seed
+
+# ===== Build outputs =====
+**/bin/
+**/obj/
+**/publish/
+**/artifacts/
+**/TestResults/
+
+# ===== NuGet =====
+*.nupkg
+# NuGet Packages folder
+**/packages/
+.nuget/
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ===== Rider caches & logs =====
+.idea/
+*.sln.iml
+
+# ===== OS files =====
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+._*
+
+# ===== User secrets =====
+secrets.json
+**/secrets.json
+*.UserSecrets/*
+*.pfx
+
+# ===== Logs =====
+logs/
+**/logs/
+*.log
+
+# ===== Docker =====
+**/Dockerfile*
+**/docker-compose*.yml
+.env
+.env.*.local
+
+# ===== Database files / data folders =====
+**/data/
+*.db
+*.sqlite
+*.sqlite3
+
+# ===== Test, coverage, temp =====
+*.coverage
+*.coveragexml
+coverage/
+coverage.*.xml
+.vstest/
+TestResults/
+*.trx
+*.log
+
+# ===== ASP.NET / Kestrel =====
+**/appsettings*.Development.json
+**/appsettings*.Local.json
+
+# ===== JetBrains Rider local history =====
+.idea/.idea.*
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+
+# ===== Visual Studio Code workspace settings =====
+.vscode/*.code-workspace
+
+# ===== Others =====
+*.swp
+*.swo
+*.bak
+*.tmp

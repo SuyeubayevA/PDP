@@ -1,0 +1,17 @@
+# Auto detect text files and normalize to LF in repo
+* text=auto
+
+# Force CRLF on Windows for these (optional)
+*.ps1 text eol=crlf
+
+# Ensure shell scripts keep LF
+*.sh text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
+*.gz binary
+*.tgz binary
+*.7z binary

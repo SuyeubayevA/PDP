@@ -1,0 +1,25 @@
+# Ignore git
+.git
+.gitignore
+
+# Ignore user files
+.vs
+.vscode
+.idea
+
+# Build output
+**/bin
+**/obj
+**/artifacts
+**/publish
+
+# Local data / logs
+logs
+data
+
+# Docker files not needed
+Dockerfile.*
+docker-compose.override.yml
+
+# node_modules if any frontends
+node_modules
