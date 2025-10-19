@@ -6,6 +6,7 @@ using ActivitiesService.Infrastructure.Messaging;
 using ActivitiesService.Infrastructure.Repositories;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using School.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +54,8 @@ builder.Services.AddMassTransit(x =>
                 r.Handle<DbUpdateException>();
             });
 
-            e.DiscardFaultedMessages();
+            e.SetQueueArgument("x-dead-letter-exchange", "activities.dlx");
+            e.SetQueueArgument("x-dead-letter-routing-key", "activities.student-removed.dlq");
         });
 
         cfg.ReceiveEndpoint("activities.activity-created", e =>
@@ -69,7 +71,8 @@ builder.Services.AddMassTransit(x =>
                 r.Ignore<ArgumentNullException>();
             });
 
-            e.DiscardFaultedMessages();
+            e.SetQueueArgument("x-dead-letter-exchange", "activities.dlx");
+            e.SetQueueArgument("x-dead-letter-routing-key", "activities.activity-created.dlq");
         });
 
         cfg.ReceiveEndpoint("activities.student-enrolled", e =>
@@ -85,7 +88,32 @@ builder.Services.AddMassTransit(x =>
                 r.Ignore<ArgumentNullException>();
             });
 
-            e.DiscardFaultedMessages();
+            e.SetQueueArgument("x-dead-letter-exchange", "activities.dlx");
+            e.SetQueueArgument("x-dead-letter-routing-key", "activities.student-enrolled.dlq");
+        });
+
+        cfg.ReceiveEndpoint("activities.student-removed.dlq", dlq =>
+        {
+            dlq.Handler<StudentRemoved>(async ctx =>
+            {
+                Console.WriteLine($"[DLQ] student-removed StudentId={ctx.Message.StudentId}");
+            });
+        });
+
+        cfg.ReceiveEndpoint("activities.activity-created.dlq", dlq =>
+        {
+            dlq.Handler<ActivityCreated>(async ctx =>
+            {
+                Console.WriteLine($"[DLQ] activity-created Name={ctx.Message.Name} Capacity={ctx.Message.Capacity}");
+            });
+        });
+
+        cfg.ReceiveEndpoint("activities.student-enrolled.dlq", dlq =>
+        {
+            dlq.Handler<StudentEnrolledInActivity>(async ctx =>
+            {
+                Console.WriteLine($"[DLQ] student-enrolled ActivityId={ctx.Message.ActivityId} StudentId={ctx.Message.StudentId}");
+            });
         });
     });
 });
