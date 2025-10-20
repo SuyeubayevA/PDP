@@ -19,6 +19,9 @@ public class EnrollStudentHandler : IRequestHandler<EnrollStudentCommand, int>
         var current = await _repo.CountActiveEnrollmentsAsync(request.ActivityId, ct);
         if (current >= activity.Capacity) throw new InvalidOperationException("No seats");
 
+        var currentStudents = await _repo.ListEnrollmentsAsync(request.ActivityId, ct);
+        if (currentStudents.Any(x => x.StudentId == request.StudentId)) throw new InvalidOperationException("Student has already enrolled");
+
         var enroll = new ActivityEnrollment
         {
             ActivityId = request.ActivityId,
