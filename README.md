@@ -65,13 +65,13 @@ curl -X POST http://localhost:5066/api/students \
 
 **Examples**
 
-# Create activity
+#### Create activity
 
 - `curl -X POST http://localhost:5286/api/activities \`
   `-H "Content-Type: application/json" \`
   `-d '{"name":"Robotics","capacity":12}'`
 
-# Enroll student
+#### Enroll student
 
 - `curl -X POST http://localhost:5286/api/activities/123/enroll \`
   `-H "Content-Type: application/json" \`
