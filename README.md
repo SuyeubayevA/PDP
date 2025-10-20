@@ -184,27 +184,28 @@ If you rebuilt your project locally but don't see changes in containers, force r
 
 # Monolit and Activities Service flow:
 
-+------------+ +---------------+ +---------------------+ +-----------------------+
-| Controller | --> | Command (HTTP)| --> | Domain + Outbox | --> | OutboxProcessor |
-| (API) | | (map to Cmd) | | (same DB transaction)| | (background publishes)|
-+------------+ +---------------+ +---------------------+ +-----------------------+
-|
-v
-+-------------+
-| RabbitMQ |
-| exchange / |
-| queue |
-+-------------+
-|
-v
-+-----------------+ +----------------+ |
-| Consumer | ----> | Handler | |
-| (MassTransit) | | (business) | |
-+-----------------+ +----------------+ |
-| |
-| on repeated failures |
-v |
-+----------------------+ |
-| Dead-Letter Queue | <------------------+
-| ({queue}\_error) |
-+----------------------+
++------------+     +---------------+     +---------------------+     +-----------------------+
+| Controller | --> | Command (HTTP)| --> | Domain + Outbox     | --> | OutboxProcessor       |
+|  (API)     |     | (map to Cmd)  |     | (same DB transaction)|     | (background publishes)|
++------------+     +---------------+     +---------------------+     +-----------------------+
+                                                                            |
+                                                                            v
+                                                                      +-------------+
+                                                                      | RabbitMQ    |
+                                                                      | exchange /  |
+                                                                      | queue       |
+                                                                      +-------------+
+                                                                            |
+                                                                            v
+                                +-----------------+       +----------------+  |
+                                | Consumer        | ----> | Handler        |  |
+                                | (MassTransit)   |       | (business)     |  |
+                                +-----------------+       +----------------+  |
+                                     |                                      |
+                                     | on repeated failures                 |
+                                     v                                      |
+                                +----------------------+                    |
+                                | Dead-Letter Queue    | <------------------+
+                                | ({queue}_error)      |
+                                +----------------------+
+
