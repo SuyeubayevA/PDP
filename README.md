@@ -183,7 +183,7 @@ If you rebuilt your project locally but don't see changes in containers, force r
 - [ ] Monitor outbox, DLQs and consumer retry/error queues (alerts).
 
 # Monolit and Activities Service flow:
-
+```
 +------------+     +---------------+     +---------------------+     +-----------------------+
 | Controller | --> | Command (HTTP)| --> | Domain + Outbox     | --> | OutboxProcessor       |
 |  (API)     |     | (map to Cmd)  |     | (same DB transaction)|     | (background publishes)|
@@ -209,3 +209,4 @@ If you rebuilt your project locally but don't see changes in containers, force r
                                 | ({queue}_error)      |
                                 +----------------------+
 
+```
