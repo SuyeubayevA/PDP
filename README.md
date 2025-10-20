@@ -107,21 +107,15 @@ Run locally (recommended)
 
 From repository root:
 
-# build images and run all services + infra (RabbitMQ, SQL if enabled)
+**build images and run all services**
 
 - `docker compose up --build -d`
-
-# follow service logs (example)
-
-- `docker compose logs -f activities-service`
 
 **Stop and remove:**
 
 - `docker compose down`
 
 **Force-rebuild when you changed code**
-If you rebuilt your project locally but don't see changes in containers, force rebuild images with no cache:
-
 - `docker compose build --no-cache`
 - `docker compose up -d --force-recreate --build`
 
@@ -129,9 +123,9 @@ If you rebuilt your project locally but don't see changes in containers, force r
 
 **InMemory DB** — by default services use EF UseInMemoryDatabase. This works for quick dev, but data is not persisted across restarts. For persistent dev DB use SQLite or SQL Server container and change USE_INMEMORY=false in env.
 
-**Logs** — Serilog is configured. When running in containers logs are written to /app/logs/app.log. If you mount host volumes, logs will appear in ./logs/<service>/app.log.
+**Logs** — Serilog is configured. When running in containers logs are written to /app/logs/app.log.
 
-**RabbitMQ** — When running via docker-compose, containers talk to RabbitMQ using service name rabbitmq:5672. If you need to connect from host tools, map the host ports (e.g. 5672:5672 or your custom mapping) and use amqp://guest:guest@localhost:<host-port>/.
+**RabbitMQ** — When running via docker-compose, containers talk to RabbitMQ using service name rabbitmq:5672. If you need to connect from host tools, map the host ports 5673, 15673
 
 **DLQ / poison messages** — consumers are configured to retry and then allow MassTransit to move failed messages to {queue}\_error. Inspect and replay from RabbitMQ Management UI when necessary.
 
