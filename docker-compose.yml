@@ -1,0 +1,77 @@
+version: "3.8"
+
+services:
+  monolith:
+    build:
+      context: .
+      dockerfile: monolith/src/StudentDiary.Presentation/Dockerfile
+    image: studentdiary/monolith:local
+    container_name: sd_monolith
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - PAYMENTS__BASEURL=http://payment-service:80
+      - RABBITMQ__HOST=rabbitmq
+      - RABBITMQ__USER=guest
+      - RABBITMQ__PASS=guest
+    ports:
+      - "5066:80"
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./logs/monolith:/app/logs
+
+  activities-service:
+    build:
+      context: .
+      dockerfile: activities-service/src/ActivitiesService.Api/Dockerfile
+    image: studentdiary/activities-service:local
+    container_name: sd_activities
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - MONOLITH__BASEURL=http://monolith:80
+      - RABBITMQ__HOST=rabbitmq
+      - RABBITMQ__USER=guest
+      - RABBITMQ__PASS=guest
+    ports:
+      - "5286:80"
+    depends_on:
+      - monolith
+      - rabbitmq
+    volumes:
+      - ./logs/activities:/app/logs
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/src/PaymentService.Api/Dockerfile
+    image: studentdiary/payment-service:local
+    container_name: sd_payment
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - RABBITMQ__HOST=rabbitmq
+      - RABBITMQ__USER=guest
+      - RABBITMQ__PASS=guest
+    ports:
+      - "5063:80"
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./logs/payment:/app/logs
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: sd_rabbitmq
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5

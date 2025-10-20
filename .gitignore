@@ -54,13 +54,10 @@ logs/
 *.log
 
 # ===== Docker =====
-**/Dockerfile*
-**/docker-compose*.yml
 .env
 .env.*.local
 
 # ===== Database files / data folders =====
-**/data/
 *.db
 *.sqlite
 *.sqlite3
@@ -74,10 +71,6 @@ coverage.*.xml
 TestResults/
 *.trx
 *.log
-
-# ===== ASP.NET / Kestrel =====
-**/appsettings*.Development.json
-**/appsettings*.Local.json
 
 # ===== JetBrains Rider local history =====
 .idea/.idea.*
