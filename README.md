@@ -180,7 +180,7 @@ From repository root:
 ```
 +------------+     +---------------+     +---------------------+     +-----------------------+
 | Controller | --> | Command (HTTP)| --> | Domain + Outbox     | --> | OutboxProcessor       |
-|  (API)     |     | (map to Cmd)  |     | (same DB transaction)|     | (background publishes)|
+|  (API)     |     |               |     | (same DB transaction)|     | (background publishes)|
 +------------+     +---------------+     +---------------------+     +-----------------------+
                                                                             |
                                                                             v
