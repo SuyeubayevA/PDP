@@ -11,7 +11,6 @@ using StudentDiary.Infrastructure.HttpPolicies;
 using StudentDiary.Infrastructure.Integrations;
 using StudentDiary.Infrastructure.Outbox;
 using StudentDiary.Infrastructure.Repositories;
-using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +38,7 @@ builder.Services.AddHostedService<OutboxProcessor>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateStudentCommand).Assembly));
 
-var paymentBase = builder.Configuration["PAYMENTS__BASEURL"] ?? "http://localhost:5063/";
+var paymentBase = builder.Configuration["PAYMENTS__BASEURL"] ?? "http://payment-service:80/";
 builder.Services
     .AddHttpClient<IPaymentsService, PaymentsApiClient>(c =>
     {

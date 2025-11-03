@@ -15,6 +15,11 @@ public class ActivityCreatedConsumer : IConsumer<ActivityCreated>
     {
         var msg = context.Message;
 
+        if (msg.Capacity < 0)
+        {
+            throw new InvalidOperationException(msg.ToString());
+        }
+
         var activity = new Activity
         {
             Name = msg.Name,

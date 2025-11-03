@@ -14,7 +14,6 @@ public class ActivitiesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateActivityRequest req, CancellationToken ct)
     {
-        // теперь Id не генерируем, просто публикуем
         var evt = new ActivityCreated(
             Name: req.Name,
             Schedule: req.Schedule,
